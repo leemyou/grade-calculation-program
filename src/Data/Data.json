@@ -1,0 +1,24 @@
+{
+    "one":[
+        {
+            "id":0,
+            "complete": "교양",
+            "essential": "선택",
+            "subject": "자기소개서 작성",
+            "credit": 2,
+            "score" : [20, 20, 30, 30]
+        },
+        {
+            "id": 1,
+            "complete": "전공",
+            "essential": "필수",
+            "subject": "소프트웨어 공학",
+            "credit": 3,
+            "score" : [20, 20, 30, 30]  
+        }
+    ],
+    "two":[
+    ],
+    "three":[
+    ]
+}
