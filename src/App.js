@@ -1,14 +1,15 @@
 import "./Style/App.css"
-import Table from "./Component/Table";
+import Tables from "./Component/Table";
 import tableData from './Data/Data.json'
 
 function App() {
-  console.log(tableData.one);
+
+  const headerData = ['이수', '필수', '과목명', '학점', '출석점수', '과제점수', '중간고사', '기말고사', '총점', '평균', '성적']
 
   // 학년별 분류하기  // 배열 형태
   const grade1 = tableData.one;
-  // const grade2 = tableData.two;
-  // const grade3 = tableData.three;
+  const grade2 = tableData.two;
+  const grade3 = tableData.three;
 
   return (
     <div className="App">
@@ -17,7 +18,9 @@ function App() {
         <h3>202045060 임효현</h3>
       </div>
 
-      <Table grade="1" data={grade1}/>
+      <Tables grade="1" header={headerData} data={grade1}/>
+      <Tables grade="2" header={headerData} data={grade2}/>
+      <Tables grade="3" header={headerData} data={grade3}/>
     </div>
   );
 }
