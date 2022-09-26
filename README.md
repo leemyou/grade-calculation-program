@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+# Front-end 개발 실습 2022 과제
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 성적 계산 시스템
 
-## Available Scripts
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 해야할 일
+~~추가버튼 누르면 input열 추가~~
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+~~이미 추가버튼을 눌러서 input이 있다면 추가버튼을 reset버튼으로 변경~~
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+F 학점이라면 총점을 0점으로 체크해야할까?
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 저장버튼
+~~저장버튼 누르면 input열 삭제되면서 배열에 value추가~~
 
-### `npm run build`
+과목명 다음에 탭 버튼 누르면 학점 체크란만 alert창 여러개 뜨는 오류 해결
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+아무것도 안누르고 저장만 누르면 추가한 뒤에 저장버튼 눌러달라는 메시지 추가
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+~~input값에 숫자만 들어가야하는 부분 체크~~
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+~~max값 20,20,30,30넘으면 일정 값 이상은 입력할 수 없다고 경고 alert넣어주기~~
 
-### `npm run eject`
+같은 과목명이 들어오면 막아야함
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+학점이 1학점이면 패논패로 받아야함
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 삭제버튼
+~~삭제될 때 계산 다시 할 것~~
 
-## Learn More
+~~체크한 행 삭제~~
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+~~input 박스 있는 행도 삭제 가능하게 할 것~~
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+~~삭제될 때 아래 행이 체크되는 오류 수정
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 최종 총합
+~~최종 총합 열 구성~~
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+~~최종 총합 열 소수점 3자리에서 반올림(소수점 2자리 까지만 보이도록)
