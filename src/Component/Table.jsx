@@ -49,6 +49,15 @@ const Tables = (props) => {
    * 저장버튼 onClick
    */
   const btnSave = () => {
+
+    const query = `input[name='${grade}']:checked`;
+    const selectedEls = document.querySelectorAll(query);
+
+    if(selectedEls.length === 0){
+      alert('추가 버튼을 눌러 요소를 추가한 후에 저장버튼을 눌러주세요.')
+      return false
+    }
+    
     const thisTable = document.getElementById(`tables${grade}`)
 
     // 데이터 저장
@@ -65,7 +74,6 @@ const Tables = (props) => {
       if(!subjectValue){
         alert('과목명을 입력해주세요!')
       }else{
-        console.log(attendValue)
           const saveData = {
           id: data.length,
           complete: completeValue,
@@ -75,7 +83,6 @@ const Tables = (props) => {
           score: [attendValue,"","",""]
         }
         setSavedData(saveData)
-        console.log(saveData);
 
         thisTable.deleteRow(1)
 
@@ -246,7 +253,6 @@ const Tables = (props) => {
       }
     })
     var dataLength = data.length - credit1Length;
-    console.log(dataLength)
     return dataLength;
   }
 
@@ -266,7 +272,6 @@ const Tables = (props) => {
   }
 
 
-  console.log(data)
 
 
   return(
