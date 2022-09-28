@@ -68,13 +68,13 @@ const Tables = (props) => {
    */
   const btnSave = () => {
 
-    // const query = `input[name='${grade}']:checked`;
-    // const selectedEls = document.querySelectorAll(query);
+    const query = `input[name='inputSubjectValue']`;
+    const inputEls = document.querySelectorAll(query);
 
-    // if(selectedEls.length === 0){
-    //   alert('추가 버튼을 눌러 요소를 추가한 후에 저장버튼을 눌러주세요.')
-    //   return false
-    // }
+    if(inputEls.length === 0){
+      alert('추가 버튼을 눌러 요소를 추가한 후에 저장버튼을 눌러주세요.')
+      return false;
+    }
     
     const thisTable = document.getElementById(`tables${grade}`)
 
