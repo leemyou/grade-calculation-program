@@ -30,6 +30,24 @@ const Tables = (props) => {
   }
 
 
+  /**
+   * 이미 동일 과목이 존재하는지 확인하는 함수 /
+   * 이수, 필수, 과목명이 매개변수
+   * @param {string} comp, esse, subj
+   * @returns true/false
+   */
+  const isExistanceSame = (comp, esse, subj) => {
+    const sameData = data.filter((item) => (
+      item.complete === comp && item.essential === esse && item.subject === subj
+    ))
+    if(sameData.length > 0 ){
+      return false  // 같은 과목 있음
+    }else{
+      return true;  // 같은 과목 없음 -> 넘겨도 됨
+    }
+  }
+
+
   // 버튼 onClick 이벤트
   /**
    * 추가 버튼 onClick
@@ -50,13 +68,13 @@ const Tables = (props) => {
    */
   const btnSave = () => {
 
-    const query = `input[name='${grade}']:checked`;
-    const selectedEls = document.querySelectorAll(query);
+    // const query = `input[name='${grade}']:checked`;
+    // const selectedEls = document.querySelectorAll(query);
 
-    if(selectedEls.length === 0){
-      alert('추가 버튼을 눌러 요소를 추가한 후에 저장버튼을 눌러주세요.')
-      return false
-    }
+    // if(selectedEls.length === 0){
+    //   alert('추가 버튼을 눌러 요소를 추가한 후에 저장버튼을 눌러주세요.')
+    //   return false
+    // }
     
     const thisTable = document.getElementById(`tables${grade}`)
 
@@ -67,6 +85,11 @@ const Tables = (props) => {
     const creditValue = document.getElementById('inputCredit').value
     const attendValue = document.getElementById('inputAttend').value
 
+    // 이미 data에 같은 이수+필수+과목명의 과목이 있다면 입력 못하도록 막음
+    if(!isExistanceSame(completeValue, essentialValue, subjectValue)){
+      alert('같은 학년 내 동일 과목은 입력할 수 없습니다.')
+      return false;
+    }else{
     // 1학점은 온라인강의 p/np로 계산
     // eslint-disable-next-line eqeqeq
     if(creditValue == 1 ){
@@ -125,8 +148,8 @@ const Tables = (props) => {
         setData([...data,saveData])
       
         setBtnDisplay(!btnDisplay)
-
       }
+    }
     }
   }
 
@@ -262,7 +285,7 @@ const Tables = (props) => {
    * @returns (int)TotalScore
    */
   const rowTotalScore = (attention, report, mid, fin) => {
-    const total = parseInt(attention + report + mid + fin);
+    const total = parseInt(attention) + parseInt(report) + parseInt(mid) + parseInt(fin);
     // eslint-disable-next-line use-isnan
     if(isNaN(total)){
       return ""
@@ -353,7 +376,7 @@ const Tables = (props) => {
               <td>{totalScore(2)}</td>
               <td>{totalScore(3)}</td>
               <td>{totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3)}</td>
-              <td>{(totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3))/totalAvg()}</td>
+              <td>{((totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3))/totalAvg()).toFixed(2)}</td>
               <td>{totalGrade()}</td>
             </ResultTr>
           </Tbody>
