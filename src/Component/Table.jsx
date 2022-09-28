@@ -2,20 +2,33 @@ import React, { useState } from "react";
 import styled from 'styled-components'
 import Table from 'react-bootstrap/Table';
 import TR from './InputTr';
+// import { useCallback } from "react";
 
 
 const Tables = (props) => {
 
-  // console.log(props)
   const grade = props.grade;
   const header = props.header;
-  const data = props.data;
-  const [datas, setDatas] = useState([data])  // 컴포넌트를 re-render 시켜주기 위함
-  
+  const [data, setData] = useState(props.data)
+
   const tableID = `tables${grade}`
   const [addTR, setAddTR] = useState([]);   // TR컴포넌트의 추가 관리
-  const [saveData ,setSavedData] = useState([]);      // saveData(추가되는 데이터) 관리
+  const [,setSavedData] = useState([]);      // saveData(추가되는 데이터) 관리
   const [btnDisplay, setBtnDisplay] = useState(true); // 초기화, 추가 버튼의 display 관리
+
+
+
+
+  /**
+   * 
+   * @param {Array} arr1 
+   * @param {Array} arr2 
+   * @returns (Array)공통되는 부분이 제거된 배열
+   */
+   const findUniqElem = (arr1, arr2) => {
+    return arr1.concat(arr2).filter(item => !arr1.includes(item) || !arr2.includes(item))
+  }
+
 
   // 버튼 onClick 이벤트
   /**
@@ -44,46 +57,71 @@ const Tables = (props) => {
     const subjectValue = document.getElementById('inputSubject').value
     const creditValue = document.getElementById('inputCredit').value
     const attendValue = document.getElementById('inputAttend').value
-    const reportValue = document.getElementById('inputReport').value
-    const midValue = document.getElementById('inputMid').value
-    const finValue = document.getElementById('inputFin').value
 
-    // null값 체크
-    if( !subjectValue || !creditValue || !attendValue || 
-      !reportValue || !midValue || !finValue){
-        alert('빈 값을 채워주시거나 학점,과제점수, 중간고사, 기말고사는 숫자로 채워주세요')
-    }
-    else{
-      var score = []
-      score.push(attendValue)
-      score.push(reportValue)
-      score.push(midValue)
-      score.push(finValue)
-  
-      const saveData = {
-        id: data.length+1,
-        complete: completeValue,
-        essential: essentialValue,
-        subject: subjectValue,
-        credit: creditValue,
-        score: score
+    // 1학점은 온라인강의 p/np로 계산
+    // eslint-disable-next-line eqeqeq
+    if(creditValue == 1 ){
+
+      if(!subjectValue){
+        alert('과목명을 입력해주세요!')
+      }else{
+        console.log(attendValue)
+          const saveData = {
+          id: data.length,
+          complete: completeValue,
+          essential: essentialValue,
+          subject: subjectValue,
+          credit: creditValue,
+          score: [attendValue,"","",""]
+        }
+        setSavedData(saveData)
+        console.log(saveData);
+
+        thisTable.deleteRow(1)
+
+        // 데이터가 들어간 열 추가
+        setData([...data,saveData])
+      
+        setBtnDisplay(!btnDisplay)
       }
-      setSavedData(saveData)
-  
-      // input이 들어간 행 삭제
-      thisTable.deleteRow(1)
-  
-      // 데이터가 들어간 열 추가
-      data.push(saveData)
-      setDatas({
-        ...datas
-      })
-  
-      setBtnDisplay(!btnDisplay)
+    }
+    // 2,3 학점은 학점 계산
+    // eslint-disable-next-line eqeqeq
+    else if(creditValue == 2 || creditValue ==3){
+      const reportValue = document.getElementById('inputReport').value
+      const midValue = document.getElementById('inputMid').value
+      const finValue = document.getElementById('inputFin').value
 
+      if(!subjectValue || !attendValue || !reportValue || !midValue || !finValue){
+        alert('빈 값을 채워주세요')
+      }else{
+        var score = []
+        score.push(attendValue)
+        score.push(reportValue)
+        score.push(midValue)
+        score.push(finValue)
+        
+        const saveData = {
+          id: data.length,
+          complete: completeValue,
+          essential: essentialValue,
+          subject: subjectValue,
+          credit: creditValue,
+          score: score
+        }
+        setSavedData(saveData)
+      
+        // input이 들어간 행 삭제
+        thisTable.deleteRow(1)
+      
+        // 데이터가 들어간 열 추가
+        setData([...data,saveData])
+      
+        setBtnDisplay(!btnDisplay)
+
+      }
     }
   }
-  console.log(saveData) // 이게 있어야 밑에 successfully안뜨는데 이거 어떻게 해야하나..
 
   /**
    * 삭제버튼 onClick
@@ -96,27 +134,33 @@ const Tables = (props) => {
 
     let result = [];
     selectedEls.forEach((el) => {
-      result.push(el.value);
+      result.push(parseInt(el.value));
     })
-    console.log(result)
     if(result.length === 0){
       alert('삭제하고싶은 요소를 체크 후 삭제 버튼을 눌러주세요');
     }
-    // 아예 data에서 없애버려야함
-    if(result.includes('on')){
-      // 첫번째 input 줄 제거
-      thisTable.deleteRow(1)
-    }
-    if(result.length !== 0 && !result.includes('on')){
-    for(var i=0; i<result.length; i++){ //[0, 1]
-      const wantDeleteData = parseInt(result[i])
-      data.splice(wantDeleteData, 1)
-    }
-    setDatas(data)
+
+    // NaN(input 태그가 있는 row)
+    if(result.includes(NaN)){
+      // input 태그가 들어간 row 체크 시
+      thisTable.deleteRow(1) //첫번째 input 줄 제거
+      setBtnDisplay(!btnDisplay)
     }
 
-    console.log(data)
+    const dataID = []
+    data.map(item => 
+      dataID.push(item.id)
+    )
+    if(result.length>0 && !result.includes(NaN)){
+      const newDataIDs = findUniqElem(result, dataID) // 체크되지 않은 id끼리만 남게됨.
+      const newData = data.filter(item => newDataIDs.includes(item.id))
+      
+      setData(newData)
+    }
   }
+
+
+  
 
   /**
    * 초기화 버튼 onClick
@@ -133,7 +177,7 @@ const Tables = (props) => {
 
   // 컴포넌트에서 사용하는 계산
   /**
-   * 총 학점 계산
+   * 합계 학점 계산
    * @returns (int)total
    */
   const totalCredit = () => {
@@ -145,24 +189,28 @@ const Tables = (props) => {
   }
   
   /**
-   * 총합 점수(출석점수, 과제점수, 중간, 기말) 계산
+   * 총점 합계(출석점수, 과제점수, 중간, 기말) 계산
    * @param {int} num 
    * @returns (int)total
    */
   const totalScore = (num) => {
     var total = 0
     for(var i=0; i<data.length; i++){
-      total += parseInt(data[i].score[num])
+      if(data[i].score[num] === 'p' || data[i].score[num] === ''){
+        total += 0;
+      }else{
+        total += parseInt(data[i].score[num])
+      }
     }
     return total;
   }
 
   /**
-   * 총합 성적 계산
+   * 합계 성적 계산
    * @returns (int)total
    */
   const totalGrade = () => {
-    var totalItem = (totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3))/data.length
+    var totalItem = (totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3))/totalAvg()
     
     if(totalItem>95){
       return 'A+'
@@ -184,6 +232,41 @@ const Tables = (props) => {
       return 'F'
     }
   }
+
+  /**
+   * 1학점을 제외한 data의 배열 길이
+   * @returns (num)dataLength
+   */
+  const totalAvg = () => {
+    var credit1Length = 0;
+    // eslint-disable-next-line array-callback-return
+    data.map((item) => {
+      if(item.credit === '1'){
+        credit1Length += 1;
+      }
+    })
+    var dataLength = data.length - credit1Length;
+    console.log(dataLength)
+    return dataLength;
+  }
+
+  /**
+   * 1학점 총점이 NaN으로 표시되는걸 방지하기 위한 함수
+   * @param {int} totalItem 
+   * @returns (int)TotalScore
+   */
+  const rowTotalScore = (attention, report, mid, fin) => {
+    const total = parseInt(attention + report + mid + fin);
+    // eslint-disable-next-line use-isnan
+    if(isNaN(total)){
+      return ""
+    }else{
+      return total
+    }
+  }
+
+
+  console.log(data)
 
 
   return(
@@ -216,6 +299,8 @@ const Tables = (props) => {
               const clacGrade = (totalItem) => {
                 if(item.score[0]==='0'){  // 결석 4번은 F
                   return 'F'
+                }else if(item.score[0]==='p'){
+                  return 'P'
                 }
                 else if(totalItem>=95){
                   return 'A+'
@@ -244,11 +329,11 @@ const Tables = (props) => {
                     <td>{item.essential}</td>
                     <td className="tdSubject">{item.subject}</td>
                     <td>{item.credit}</td>
-                    <td>{item.score[0]}</td>
+                    <td>{item.score[0]==='p' ? "" : item.score[0]}</td>
                     <td>{item.score[1]}</td>
                     <td>{item.score[2]}</td>
                     <td>{item.score[3]}</td>
-                    <td>{totalItem}</td>
+                    <td>{rowTotalScore(item.score[0], item.score[1], item.score[2], item.score[3])}</td>
                     <td></td>
                     <td style={{color: clacGrade(totalItem)==='F' ? 'red' : 'var(--gray900)'}}>{clacGrade(totalItem)}</td>
                   </tr>
@@ -263,7 +348,7 @@ const Tables = (props) => {
               <td>{totalScore(2)}</td>
               <td>{totalScore(3)}</td>
               <td>{totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3)}</td>
-              <td>{(totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3))/data.length}</td>
+              <td>{(totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3))/totalAvg()}</td>
               <td>{totalGrade()}</td>
             </ResultTr>
           </Tbody>
