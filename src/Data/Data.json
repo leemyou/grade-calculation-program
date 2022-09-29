@@ -1,24 +1,192 @@
 {
     "one":[
         {
-            "id":0,
+            "id": 0,
+            "complete": "교양",
+            "essential": "필수",
+            "subject": "대학생을 위한 실용금웅",
+            "credit": 1,
+            "score" : ["p", "", "", ""]
+        },
+        {
+            "id": 1,
             "complete": "교양",
             "essential": "선택",
-            "subject": "자기소개서 작성",
+            "subject": "수리와 정보 능력",
+            "credit": 1,
+            "score" :  ["p", "", "", ""]
+        },
+        {
+            "id": 2,
+            "complete": "교양",
+            "essential": "필수",
+            "subject": "엑셀 활용",
+            "credit": 1,
+            "score" :  ["p", "", "", ""]
+        },
+        {
+            "id": 3,
+            "complete": "교양",
+            "essential": "선택",
+            "subject": "영어 회화",
+            "credit": 1,
+            "score" :  ["p", "", "", ""]
+        },
+        {
+            "id": 4,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "C프로그래밍",
+            "credit": 3,
+            "score" : [20, 20, 15, 20]  
+        },
+        {
+            "id": 5,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "기초전자개론",
+            "credit": 3,
+            "score" : [20, 20, 25, 20]  
+        },
+        {
+            "id": 6,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "정보보안개론",
+            "credit": 3,
+            "score" : [20, 20, 20, 25]  
+        },
+        {
+            "id": 7,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "파이썬프로그래밍",
+            "credit": 3,
+            "score" : [20, 20, 19, 18]  
+        }
+    ],
+    "two":[
+        {
+            "id": 0,
+            "complete": "교양",
+            "essential": "선택",
+            "subject": "4차산업 기술의 이해",
             "credit": 2,
-            "score" : [20, 20, 30, 30]
+            "score" : [20, 20, 21, 23]
+        },
+        {
+            "id": 1,
+            "complete": "교양",
+            "essential": "선택",
+            "subject": "빅데이터의 이해",
+            "credit": 1,
+            "score" :  ["p", "", "", ""]
+        },
+        {
+            "id": 2,
+            "complete": "교양",
+            "essential": "선택",
+            "subject": "생활과 통계",
+            "credit": 1,
+            "score" :  ["p", "", "", ""]
+        },
+        {
+            "id": 3,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "C#프로그래밍",
+            "credit": 3,
+            "score" :  [20, 20, 30, 30]
+        },
+        {
+            "id": 4,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "JAVA프로그래밍 응용",
+            "credit": 3,
+            "score" : [20, 15, 25, 20]  
+        },
+        {
+            "id": 5,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "데이터베이스",
+            "credit": 3,
+            "score" : [20, 20, 28, 30]  
+        },
+        {
+            "id": 6,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "데이터통신",
+            "credit": 3,
+            "score" : [20, 20, 22, 25]  
+        },
+        {
+            "id": 7,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "자료구조",
+            "credit": 3,
+            "score" : [20, 20, 25, 24]  
+        }
+    ],
+    "three":[
+        {
+            "id": 0,
+            "complete": "교양",
+            "essential": "선택",
+            "subject": "글쓰기와 토론",
+            "credit": 2,
+            "score" : [20, 20, 22, 30]
         },
         {
             "id": 1,
             "complete": "전공",
-            "essential": "필수",
-            "subject": "소프트웨어 공학",
+            "essential": "선택",
+            "subject": "디지털공학",
             "credit": 3,
-            "score" : [20, 20, 30, 30]  
+            "score" :  [20, 20, 30, 24]
+        },
+        {
+            "id": 2,
+            "complete": "전공",
+            "essential": "필수",
+            "subject": "머신러닝 기초",
+            "credit": 3,
+            "score" :  [20, 20, 23, 25]
+        },
+        {
+            "id": 3,
+            "complete": "전공",
+            "essential": "필수",
+            "subject": "캡스톤 디자인",
+            "credit": 2,
+            "score" :  [20, 20, 25, 20]
+        },
+        {
+            "id": 4,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "소프트웨어 분석 설계",
+            "credit": 3,
+            "score" : [20, 20, 15, 18]
+        },
+        {
+            "id": 5,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "웹 보안",
+            "credit": 3,
+            "score" : [20, 20, 17, 28]  
+        },
+        {
+            "id": 6,
+            "complete": "전공",
+            "essential": "선택",
+            "subject": "자율드론",
+            "credit": 3,
+            "score" : [20, 20, 15, 29]  
         }
-    ],
-    "two":[
-    ],
-    "three":[
     ]
 }
