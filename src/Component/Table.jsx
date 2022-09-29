@@ -19,8 +19,6 @@ const Tables = (props) => {
   const [showTable, setShowTable] = useState(true);
 
 
-
-
   /**
    * 
    * @param {Array} arr1 
@@ -228,7 +226,7 @@ const Tables = (props) => {
   const totalScore = (num) => {
     var total = 0
     for (var i = 0; i < data.length; i++) {
-      if (data[i].score[num] === 'p' || data[i].score[num] === '') {
+      if (data[i].score[0] === 'p' || data[i].score[num] === '') {
         total += 0;
       } else {
         total += parseInt(data[i].score[num])
@@ -273,7 +271,8 @@ const Tables = (props) => {
     var credit1Length = 0;
     // eslint-disable-next-line array-callback-return
     data.map((item) => {
-      if (item.credit === '1') {
+      // eslint-disable-next-line eqeqeq
+      if (item.credit == 1) {
         credit1Length += 1;
       }
     })
@@ -295,8 +294,6 @@ const Tables = (props) => {
       return total
     }
   }
-
-  console.log(showTable)
 
 
   return (
