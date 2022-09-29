@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from 'styled-components'
 import Table from 'react-bootstrap/Table';
 import TR from './InputTr';
-// import { useCallback } from "react";
+import SlideToggle from "react-slide-toggle";
 
 
 const Tables = (props) => {
@@ -13,8 +13,10 @@ const Tables = (props) => {
 
   const tableID = `tables${grade}`
   const [addTR, setAddTR] = useState([]);   // TR컴포넌트의 추가 관리
-  const [,setSavedData] = useState([]);      // saveData(추가되는 데이터) 관리
+  const [, setSavedData] = useState([]);      // saveData(추가되는 데이터) 관리
   const [btnDisplay, setBtnDisplay] = useState(true); // 초기화, 추가 버튼의 display 관리
+
+  const [showTable, setShowTable] = useState(true);
 
 
 
@@ -25,7 +27,7 @@ const Tables = (props) => {
    * @param {Array} arr2 
    * @returns (Array)공통되는 부분이 제거된 배열
    */
-   const findUniqElem = (arr1, arr2) => {
+  const findUniqElem = (arr1, arr2) => {
     return arr1.concat(arr2).filter(item => !arr1.includes(item) || !arr2.includes(item))
   }
 
@@ -40,9 +42,9 @@ const Tables = (props) => {
     const sameData = data.filter((item) => (
       item.complete === comp && item.essential === esse && item.subject === subj
     ))
-    if(sameData.length > 0 ){
+    if (sameData.length > 0) {
       return false  // 같은 과목 있음
-    }else{
+    } else {
       return true;  // 같은 과목 없음 -> 넘겨도 됨
     }
   }
@@ -55,10 +57,10 @@ const Tables = (props) => {
   const btnAdd = () => {
     const thisTable = document.getElementById(`tables${grade}`)
 
-    if(thisTable.querySelector('select')){
+    if (thisTable.querySelector('select')) {
       alert('작업중인 내용을 저장한 후 열을 추가해주세요.')
-    }else{
-      setAddTR(addTR.concat(<TR grade={grade} id='newTr'/>))
+    } else {
+      setAddTR(addTR.concat(<TR grade={grade} id='newTr' />))
       setBtnDisplay(!btnDisplay)
     }
   }
@@ -71,11 +73,11 @@ const Tables = (props) => {
     const query = `input[name='inputSubjectValue']`;
     const inputEls = document.querySelectorAll(query);
 
-    if(inputEls.length === 0){
+    if (inputEls.length === 0) {
       alert('추가 버튼을 눌러 요소를 추가한 후에 저장버튼을 눌러주세요.')
       return false;
     }
-    
+
     const thisTable = document.getElementById(`tables${grade}`)
 
     // 데이터 저장
@@ -86,70 +88,70 @@ const Tables = (props) => {
     const attendValue = document.getElementById('inputAttend').value
 
     // 이미 data에 같은 이수+필수+과목명의 과목이 있다면 입력 못하도록 막음
-    if(!isExistanceSame(completeValue, essentialValue, subjectValue)){
+    if (!isExistanceSame(completeValue, essentialValue, subjectValue)) {
       alert('같은 학년 내 동일 과목은 입력할 수 없습니다.')
       return false;
-    }else{
-    // 1학점은 온라인강의 p/np로 계산
-    // eslint-disable-next-line eqeqeq
-    if(creditValue == 1 ){
+    } else {
+      // 1학점은 온라인강의 p/np로 계산
+      // eslint-disable-next-line eqeqeq
+      if (creditValue == 1) {
 
-      if(!subjectValue){
-        alert('과목명을 입력해주세요!')
-      }else{
+        if (!subjectValue) {
+          alert('과목명을 입력해주세요!')
+        } else {
           const saveData = {
-          id: data.length,
-          complete: completeValue,
-          essential: essentialValue,
-          subject: subjectValue,
-          credit: creditValue,
-          score: [attendValue,"","",""]
+            id: data.length,
+            complete: completeValue,
+            essential: essentialValue,
+            subject: subjectValue,
+            credit: creditValue,
+            score: [attendValue, "", "", ""]
+          }
+          setSavedData(saveData)
+
+          thisTable.deleteRow(1)
+
+          // 데이터가 들어간 열 추가
+          setData([...data, saveData])
+
+          setBtnDisplay(!btnDisplay)
         }
-        setSavedData(saveData)
-
-        thisTable.deleteRow(1)
-
-        // 데이터가 들어간 열 추가
-        setData([...data,saveData])
-      
-        setBtnDisplay(!btnDisplay)
       }
-    }
-    // 2,3 학점은 학점 계산
-    // eslint-disable-next-line eqeqeq
-    else if(creditValue == 2 || creditValue ==3){
-      const reportValue = document.getElementById('inputReport').value
-      const midValue = document.getElementById('inputMid').value
-      const finValue = document.getElementById('inputFin').value
+      // 2,3 학점은 학점 계산
+      // eslint-disable-next-line eqeqeq
+      else if (creditValue == 2 || creditValue == 3) {
+        const reportValue = document.getElementById('inputReport').value
+        const midValue = document.getElementById('inputMid').value
+        const finValue = document.getElementById('inputFin').value
 
-      if(!subjectValue || !attendValue || !reportValue || !midValue || !finValue){
-        alert('빈 값을 채워주세요')
-      }else{
-        var score = []
-        score.push(attendValue)
-        score.push(reportValue)
-        score.push(midValue)
-        score.push(finValue)
-        
-        const saveData = {
-          id: data.length,
-          complete: completeValue,
-          essential: essentialValue,
-          subject: subjectValue,
-          credit: creditValue,
-          score: score
+        if (!subjectValue || !attendValue || !reportValue || !midValue || !finValue) {
+          alert('빈 값을 채워주세요')
+        } else {
+          var score = []
+          score.push(attendValue)
+          score.push(reportValue)
+          score.push(midValue)
+          score.push(finValue)
+
+          const saveData = {
+            id: data.length,
+            complete: completeValue,
+            essential: essentialValue,
+            subject: subjectValue,
+            credit: creditValue,
+            score: score
+          }
+          setSavedData(saveData)
+
+          // input이 들어간 행 삭제
+          thisTable.deleteRow(1)
+
+          // 데이터가 들어간 열 추가
+          setData([...data, saveData])
+
+          setBtnDisplay(!btnDisplay)
         }
-        setSavedData(saveData)
-      
-        // input이 들어간 행 삭제
-        thisTable.deleteRow(1)
-      
-        // 데이터가 들어간 열 추가
-        setData([...data,saveData])
-      
-        setBtnDisplay(!btnDisplay)
       }
-    }
     }
   }
 
@@ -158,7 +160,7 @@ const Tables = (props) => {
    */
   const btnDelete = () => {
     const thisTable = document.getElementById(`tables${grade}`)
-    
+
     const query = `input[name='${grade}']:checked`;
     const selectedEls = document.querySelectorAll(query);
 
@@ -166,31 +168,31 @@ const Tables = (props) => {
     selectedEls.forEach((el) => {
       result.push(parseInt(el.value));
     })
-    if(result.length === 0){
+    if (result.length === 0) {
       alert('삭제하고싶은 요소를 체크 후 삭제 버튼을 눌러주세요');
     }
 
     // NaN(input 태그가 있는 row)
-    if(result.includes(NaN)){
+    if (result.includes(NaN)) {
       // input 태그가 들어간 row 체크 시
       thisTable.deleteRow(1) //첫번째 input 줄 제거
       setBtnDisplay(!btnDisplay)
     }
 
     const dataID = []
-    data.map(item => 
+    data.map(item =>
       dataID.push(item.id)
     )
-    if(result.length>0 && !result.includes(NaN)){
+    if (result.length > 0 && !result.includes(NaN)) {
       const newDataIDs = findUniqElem(result, dataID) // 체크되지 않은 id끼리만 남게됨.
       const newData = data.filter(item => newDataIDs.includes(item.id))
-      
+
       setData(newData)
     }
   }
 
 
-  
+
 
   /**
    * 초기화 버튼 onClick
@@ -212,12 +214,12 @@ const Tables = (props) => {
    */
   const totalCredit = () => {
     var total = 0
-    for(var i=0; i<data.length; i++){
+    for (var i = 0; i < data.length; i++) {
       total += parseInt(data[i].credit)
     }
     return total;
   }
-  
+
   /**
    * 총점 합계(출석점수, 과제점수, 중간, 기말) 계산
    * @param {int} num 
@@ -225,10 +227,10 @@ const Tables = (props) => {
    */
   const totalScore = (num) => {
     var total = 0
-    for(var i=0; i<data.length; i++){
-      if(data[i].score[num] === 'p' || data[i].score[num] === ''){
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].score[num] === 'p' || data[i].score[num] === '') {
         total += 0;
-      }else{
+      } else {
         total += parseInt(data[i].score[num])
       }
     }
@@ -240,38 +242,38 @@ const Tables = (props) => {
    * @returns (int)total
    */
   const totalGrade = () => {
-    var totalItem = (totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3))/totalAvg()
-    
-    if(totalItem>95){
+    var totalItem = (totalScore(0) + totalScore(1) + totalScore(2) + totalScore(3)) / totalAvg()
+
+    if (totalItem > 95) {
       return 'A+'
-    }else if(totalItem>=90){
+    } else if (totalItem >= 90) {
       return 'A0'
-    }else if(totalItem>=85){
+    } else if (totalItem >= 85) {
       return 'B+'
-    }else if(totalItem>=80){
+    } else if (totalItem >= 80) {
       return 'B0'
-    }else if(totalItem>=75){
+    } else if (totalItem >= 75) {
       return 'C+'
-    }else if(totalItem>=70){
+    } else if (totalItem >= 70) {
       return 'C0'
-    }else if(totalItem>=65){
+    } else if (totalItem >= 65) {
       return 'D+'
-    }else if(totalItem>=60){
+    } else if (totalItem >= 60) {
       return 'D0'
-    }else{
+    } else {
       return 'F'
     }
   }
 
   /**
-   * 1학점을 제외한 data의 배열 길이
+   * 1학점을 제외한 data의 배열 길이를 구하는 함수
    * @returns (num)dataLength
    */
   const totalAvg = () => {
     var credit1Length = 0;
     // eslint-disable-next-line array-callback-return
     data.map((item) => {
-      if(item.credit === '1'){
+      if (item.credit === '1') {
         credit1Length += 1;
       }
     })
@@ -287,108 +289,123 @@ const Tables = (props) => {
   const rowTotalScore = (attention, report, mid, fin) => {
     const total = parseInt(attention) + parseInt(report) + parseInt(mid) + parseInt(fin);
     // eslint-disable-next-line use-isnan
-    if(isNaN(total)){
+    if (isNaN(total)) {
       return ""
-    }else{
+    } else {
       return total
     }
   }
 
+  console.log(showTable)
 
 
+  return (
+    <SlideToggle>
+      {({ toggle, setCollapsibleElement }) => (
 
-  return(
-    <MainWrap>
-        <div className="title-box">
-          <h2>{grade}학년</h2>
-          <div className="btn-box">
-            <Btn onClick={btnReset} display={btnDisplay}>초기화</Btn>
-            <Btn onClick={btnAdd} display={!btnDisplay}>추가</Btn>
-            <Btn onClick={btnSave}>저장</Btn>
-            <Btn onClick={btnDelete}>삭제</Btn>
+        <MainWrap>
+          <div className="title-box">
+            <div className="title-slidebtn">
+              <p className={`btnSlide ${showTable ? '' : 'hide'}`} show={showTable} onClick={() => {toggle(); setShowTable(!showTable);}}>
+                <ion-icon name="chevron-up-outline"></ion-icon>
+              </p>
+              <h2>{grade}학년</h2>
+            </div>
+            <div className="btn-box">
+              <Btn onClick={btnReset} display={btnDisplay}>초기화</Btn>
+              <Btn onClick={btnAdd} display={!btnDisplay}>추가</Btn>
+              <Btn onClick={btnSave}>저장</Btn>
+              <Btn onClick={btnDelete}>삭제</Btn>
+            </div>
           </div>
-        </div>
 
-        <Table striped id={tableID}>
-          <Thead>
-            <tr>
-              <th>체크</th>
-            {
-              header.map((item) => {
-                return <th>{item}</th>
-              })
-            }
-            </tr>
-          </Thead>
-          <Tbody>
-            { addTR }
-            {data.map((item) => {
-              const totalItem = parseInt(item.score[0])+parseInt(item.score[1])+parseInt(item.score[2])+parseInt(item.score[3])
-              const clacGrade = (totalItem) => {
-                if(item.score[0]==='0'){  // 결석 4번은 F
-                  return 'F'
-                }else if(item.score[0]==='p'){
-                  return 'P'
+          <div ref={setCollapsibleElement}>
+            <Table className="table-wrap" striped id={tableID}>
+              <Thead>
+                <tr>
+                  <th>체크</th>
+                  {
+                    header.map((item) => {
+                      return <th>{item}</th>
+                    })
+                  }
+                </tr>
+              </Thead>
+              <Tbody>
+                {addTR}
+                {data.map((item) => {
+                  const totalItem = parseInt(item.score[0]) + parseInt(item.score[1]) + parseInt(item.score[2]) + parseInt(item.score[3])
+                  const clacGrade = (totalItem) => {
+                    if (item.score[0] === '0') {  // 결석 4번은 F
+                      return 'F'
+                    } else if (item.score[0] === 'p') {
+                      return 'P'
+                    }
+                    else if (totalItem >= 95) {
+                      return 'A+'
+                    } else if (totalItem >= 90) {
+                      return 'A0'
+                    } else if (totalItem >= 85) {
+                      return 'B+'
+                    } else if (totalItem >= 80) {
+                      return 'B0'
+                    } else if (totalItem >= 75) {
+                      return 'C+'
+                    } else if (totalItem >= 70) {
+                      return 'C0'
+                    } else if (totalItem >= 65) {
+                      return 'D+'
+                    } else if (totalItem >= 60) {
+                      return 'D0'
+                    } else {
+                      return 'F'
+                    }
+                  }
+                  return (
+                    <tr >
+                      <td><input type="checkbox" value={item.id} name={grade} id={item.id} /></td>
+                      <td>{item.complete}</td>
+                      <td>{item.essential}</td>
+                      <td className="tdSubject">{item.subject}</td>
+                      <td>{item.credit}</td>
+                      <td>{item.score[0] === 'p' ? "" : item.score[0]}</td>
+                      <td>{item.score[1]}</td>
+                      <td>{item.score[2]}</td>
+                      <td>{item.score[3]}</td>
+                      <td>{rowTotalScore(item.score[0], item.score[1], item.score[2], item.score[3])}</td>
+                      <td></td>
+                      <td style={{ color: clacGrade(totalItem) === 'F' ? 'red' : 'var(--gray900)' }}>{clacGrade(totalItem)}</td>
+                    </tr>
+                  )
+                })
                 }
-                else if(totalItem>=95){
-                  return 'A+'
-                }else if(totalItem>=90){
-                  return 'A0'
-                }else if(totalItem>=85){
-                  return 'B+'
-                }else if(totalItem>=80){
-                  return 'B0'
-                }else if(totalItem>=75){
-                  return 'C+'
-                }else if(totalItem>=70){
-                  return 'C0'
-                }else if(totalItem>=65){
-                  return 'D+'
-                }else if(totalItem>=60){
-                  return 'D0'
-                }else{
-                  return 'F'
-                }
-              }
-                return(
-                  <tr >
-                    <td><input type="checkbox" value={item.id} name={grade} id={item.id}/></td>
-                    <td>{item.complete}</td>
-                    <td>{item.essential}</td>
-                    <td className="tdSubject">{item.subject}</td>
-                    <td>{item.credit}</td>
-                    <td>{item.score[0]==='p' ? "" : item.score[0]}</td>
-                    <td>{item.score[1]}</td>
-                    <td>{item.score[2]}</td>
-                    <td>{item.score[3]}</td>
-                    <td>{rowTotalScore(item.score[0], item.score[1], item.score[2], item.score[3])}</td>
-                    <td></td>
-                    <td style={{color: clacGrade(totalItem)==='F' ? 'red' : 'var(--gray900)'}}>{clacGrade(totalItem)}</td>
-                  </tr>
-                )
-              })
-            }
-            <ResultTr>
-              <td colSpan='4'>합계</td>
-              <td>{totalCredit()}</td>  {/* 여기는 왜 괄호 써야하는지 모르것네 */}
-              <td>{totalScore(0)}</td>
-              <td>{totalScore(1)}</td>
-              <td>{totalScore(2)}</td>
-              <td>{totalScore(3)}</td>
-              <td>{totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3)}</td>
-              <td>{((totalScore(0)+totalScore(1)+totalScore(2)+totalScore(3))/totalAvg()).toFixed(2)}</td>
-              <td>{totalGrade()}</td>
-            </ResultTr>
-          </Tbody>
-        </Table>
+                <ResultTr>
+                  <td colSpan='4'>합계</td>
+                  <td>{totalCredit()}</td>  {/* 여기는 왜 괄호 써야하는지 모르것네 */}
+                  <td>{totalScore(0)}</td>
+                  <td>{totalScore(1)}</td>
+                  <td>{totalScore(2)}</td>
+                  <td>{totalScore(3)}</td>
+                  <td>{totalScore(0) + totalScore(1) + totalScore(2) + totalScore(3)}</td>
+                  <td>{((totalScore(0) + totalScore(1) + totalScore(2) + totalScore(3)) / totalAvg()).toFixed(2)}</td>
+                  <td>{totalGrade()}</td>
+                </ResultTr>
+              </Tbody>
+            </Table>
+          </div>
 
-    </MainWrap>
+
+        </MainWrap>
+      )}
+    </SlideToggle>
   )
 }
 export default Tables;
 
 
 // styled component
+
+
 const MainWrap = styled.div`
   margin: 0 auto;
   width: 80%;
@@ -398,18 +415,47 @@ const MainWrap = styled.div`
   .title-box{
     display: flex;
     justify-content: space-between;
-    padding: 0 10px;
+    padding: 0px 10px;
     align-items: center;
-    background-color: var(--gray500);
+    background-color: var(--gray400);
     height: 40px;
 
-    > h2{
+    .title-slidebtn{
+      display: flex;
+      align-items: center;
+
+
+      >p{
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        margin-top: 16px;
+        transform: rotate(0deg);
+        transition: .2s;
+
+        ion-icon{
+          font-size: 25px;
+        }
+      }
+
+      >.btnSlide.hide{
+        transform: rotate(180deg);
+      }
+
+      h2{
       font-size: 22px;
+      line-height: 40px;
+      box-sizing: border-box;
+      transform: translate(10px,4px);
+    }
     }
   }
 `
 const Btn = styled.button`
-  display: ${props => props.display===true ? 'none' : 'inline-block'};
+  display: ${props => props.display === true ? 'none' : 'inline-block'};
   padding: 3px 7px;
   margin-left: 7px;
   border: none;
