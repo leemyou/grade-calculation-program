@@ -99,7 +99,7 @@ const InputTr = (props) => {
           <option value='3' key='3'>3</option>
         </select>
       </td>
-      <td>
+      <td style={{width: '100px'}}>
         {
           !display && <input display={display} type='text' className="write_number_20 display-none" id='inputAttend' name='inputAttendValue' value={inputAttendValue} onChange={dataChange}/>
         }
@@ -111,17 +111,17 @@ const InputTr = (props) => {
         }
         
       </td>
-      <td>
+      <td style={{width: '100px'}}>
         {
           !display && <input type='text' display={display} className="write_number_20 display-none" id='inputReport' name='inputReportValue' value={inputReportValue} onChange={dataChange}/>
         }
       </td>
-      <td>
+      <td style={{width: '100px'}}>
         {
           !display && <input type='text' display={display} className="write_number_30 display-none" id='inputMid' name='inputMidValue' value={inputMidValue} onChange={dataChange}/>
         }
       </td>
-      <td>
+      <td style={{width: '100px'}}>
         {
           !display && <input type='text' display={display} className="write_number_30 display-none" id='inputFin' name='inputFinValue' value={inputFinValue}  onChange={dataChange}/>
         }
