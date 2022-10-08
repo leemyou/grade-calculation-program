@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/grade-calculation-program/static/css/main.0dd6de3d.css",
+    "main.js": "/grade-calculation-program/static/js/main.42ba1f77.js",
+    "index.html": "/grade-calculation-program/index.html",
+    "main.0dd6de3d.css.map": "/grade-calculation-program/static/css/main.0dd6de3d.css.map",
+    "main.42ba1f77.js.map": "/grade-calculation-program/static/js/main.42ba1f77.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0dd6de3d.css",
+    "static/js/main.42ba1f77.js"
+  ]
+}
