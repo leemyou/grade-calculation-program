@@ -226,7 +226,7 @@ const Tables = (props) => {
   const totalScore = (num) => {
     var total = 0
     for (var i = 0; i < data.length; i++) {
-      if (data[i].score[0] === 'p' || data[i].score[num] === '') {
+      if (data[i].score[0] === 'p' || data[i].score[0] === 'np' || data[i].score[num] === '') {
         total += 0;
       } else {
         total += parseInt(data[i].score[num])
@@ -242,7 +242,12 @@ const Tables = (props) => {
   const totalGrade = () => {
     var totalItem = (totalScore(0) + totalScore(1) + totalScore(2) + totalScore(3)) / totalAvg()
 
-    if (totalItem > 95) {
+    if(totalScore(0) === "p"){
+      return "P"
+    } else if (totalScore(0) === "np"){
+      return "NP"
+    }
+    else if (totalItem > 95) {
       return 'A+'
     } else if (totalItem >= 90) {
       return 'A0'
@@ -337,6 +342,8 @@ const Tables = (props) => {
                       return 'F'
                     } else if (item.score[0] === 'p') {
                       return 'P'
+                    } else if (item.score[0] === 'np'){
+                      return 'NP'
                     }
                     else if (totalItem >= 95) {
                       return 'A+'
@@ -365,7 +372,7 @@ const Tables = (props) => {
                       <td>{item.essential}</td>
                       <td className="tdSubject">{item.subject}</td>
                       <td>{item.credit}</td>
-                      <td>{item.score[0] === 'p' ? "" : item.score[0]}</td>
+                      <td>{item.score[0] === 'p' || item.score[0] === 'np' ? "" : item.score[0]}</td>
                       <td>{item.score[1]}</td>
                       <td>{item.score[2]}</td>
                       <td>{item.score[3]}</td>
@@ -379,7 +386,9 @@ const Tables = (props) => {
                 <ResultTr>
                   <td colSpan='4'>합계</td>
                   <td>{totalCredit()}</td>  {/* 여기는 왜 괄호 써야하는지 모르것네 */}
-                  <td>{totalScore(0)}</td>
+                  <td>
+                    {totalScore(0)}
+                  </td>
                   <td>{totalScore(1)}</td>
                   <td>{totalScore(2)}</td>
                   <td>{totalScore(3)}</td>

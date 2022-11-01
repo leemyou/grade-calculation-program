@@ -103,13 +103,6 @@ const InputTr = (props) => {
         {
           !display && <input display={display} type='text' className="write_number_20 display-none" id='inputAttend' name='inputAttendValue' value={inputAttendValue} onChange={dataChange}/>
         }
-        {
-          display && <select display={!display} className='display-none' name="inputAttendValue" id="inputAttend" value={inputAttendValue} onChange={dataChange} style={{width: '100%'}}>
-          <option value='p' key='p'>p</option>
-          <option value='np' key='np'>np</option>
-        </select>
-        }
-        
       </td>
       <td style={{width: '100px'}}>
         {
@@ -128,7 +121,14 @@ const InputTr = (props) => {
       </td>
       <td></td>
       <td></td>
-      <td></td>
+      <td>
+      {
+          display && <select display={!display} className='display-none' name="inputAttendValue" id="inputAttend" value={inputAttendValue} onChange={dataChange} style={{width: '100%'}}>
+          <option value='p' key='p'>p</option>
+          <option value='np' key='np'>np</option>
+        </select>
+        }
+      </td>
     </tr>
   )
 }
