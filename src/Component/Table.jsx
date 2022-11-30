@@ -18,17 +18,9 @@ const Tables = (props) => {
 
   const [showTable, setShowTable] = useState(true);
 
-
-  /**
-   * 
-   * @param {Array} arr1 
-   * @param {Array} arr2 
-   * @returns (Array)공통되는 부분이 제거된 배열
-   */
-  const findUniqElem = (arr1, arr2) => {
-    return arr1.concat(arr2).filter(item => !arr1.includes(item) || !arr2.includes(item))
-  }
-
+  const [isChecked, setIsChecked] = useState(false);
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [inputCheckBox, setInputCheckBox] = useState(false)
 
   /**
    * 이미 동일 과목이 존재하는지 확인하는 함수 /
@@ -48,19 +40,27 @@ const Tables = (props) => {
   }
 
 
-  // 버튼 onClick 이벤트
+  /**
+   * 체크박스 단일 선택
+   */
+  const onClickCheckBox = (checked, id) => {
+    setIsChecked(!isChecked)
+    if(checked){  
+      // 체크됨
+      setCheckedItems(prev => [...prev, id])
+    }else{
+      // 체크되지 않음 -> 배열에서 빠짐
+      setCheckedItems(checkedItems.filter((el) => el !== id))
+    }
+  }
+  console.log(checkedItems)
+
   /**
    * 추가 버튼 onClick
    */
   const btnAdd = () => {
-    const thisTable = document.getElementById(`tables${grade}`)
-
-    if (thisTable.querySelector('select')) {
-      alert('작업중인 내용을 저장한 후 열을 추가해주세요.')
-    } else {
-      setAddTR(addTR.concat(<TR grade={grade} id='newTr' />))
-      setBtnDisplay(!btnDisplay)
-    }
+    setAddTR(addTR.concat(<TR grade={grade} id='newTr' setInputCheckBox={setInputCheckBox}/>))
+    setBtnDisplay(!btnDisplay)
   }
 
   /**
@@ -157,51 +157,38 @@ const Tables = (props) => {
    * 삭제버튼 onClick
    */
   const btnDelete = () => {
-    const thisTable = document.getElementById(`tables${grade}`)
-
-    const query = `input[name='${grade}']:checked`;
-    const selectedEls = document.querySelectorAll(query);
-
-    let result = [];
-    selectedEls.forEach((el) => {
-      result.push(parseInt(el.value));
-    })
-    if (result.length === 0) {
+    if(checkedItems.length === 0 && inputCheckBox === false){   // 삭제 요소가 없을 때
       alert('삭제하고싶은 요소를 체크 후 삭제 버튼을 눌러주세요');
+      return false;
     }
-
-    // NaN(input 태그가 있는 row)
-    if (result.includes(NaN)) {
-      // input 태그가 들어간 row 체크 시
-      thisTable.deleteRow(1) //첫번째 input 줄 제거
+    else if(inputCheckBox === true){  // input체크박스가 체크 되었을 때
+      const thisTable = document.getElementById(`tables${grade}`)
+      thisTable.deleteRow(1)
       setBtnDisplay(!btnDisplay)
     }
+    const deleteElement = checkedItems.map(item=> Number(item))
+    setCheckedItems([])
 
-    const dataID = []
-    data.map(item =>
-      dataID.push(item.id)
-    )
-    if (result.length > 0 && !result.includes(NaN)) {
-      const newDataIDs = findUniqElem(result, dataID) // 체크되지 않은 id끼리만 남게됨.
-      const newData = data.filter(item => newDataIDs.includes(item.id))
+    setData(data.filter(x => !deleteElement.includes(x.id)))
 
-      setData(newData)
-    }
   }
-
 
 
 
   /**
    * 초기화 버튼 onClick
    */
-  const btnReset = () => {
+  const btnReset = (grade) => {
     document.getElementById('inputSubject').value = ''
-    document.getElementById('inputCredit').value = ''
-    document.getElementById('inputAttend').value = ''
-    document.getElementById('inputReport').value = ''
-    document.getElementById('inputMid').value = ''
-    document.getElementById('inputFin').value = ''
+    console.log('삭제1')
+    if(document.getElementById('inputCredit').value === 2 || document.getElementById('inputCredit').value === 3){
+      document.getElementById('inputAttend').value = ''
+      document.getElementById('inputReport').value = ''
+      document.getElementById('inputMid').value = ''
+      document.getElementById('inputFin').value = ''
+      console.log("hi")
+
+    }
   }
 
 
@@ -303,9 +290,10 @@ const Tables = (props) => {
 
   return (
     <SlideToggle>
-      {({ toggle, setCollapsibleElement }) => (
+      {
+      ({ toggle, setCollapsibleElement }) => (
 
-        <MainWrap>
+        <MainWrap className={`main-wrap-${grade}`}>
           <div className="title-box">
             <div className="title-slidebtn">
               <p className={`btnSlide ${showTable ? '' : 'hide'}`} show={showTable} onClick={() => {toggle(); setShowTable(!showTable);}}>
@@ -314,7 +302,7 @@ const Tables = (props) => {
               <h2>{grade}학년</h2>
             </div>
             <div className="btn-box">
-              <Btn onClick={btnReset} display={btnDisplay}>초기화</Btn>
+              <Btn onClick={() => btnReset(grade)} display={btnDisplay}>초기화</Btn>
               <Btn onClick={btnAdd} display={!btnDisplay}>추가</Btn>
               <Btn onClick={btnSave}>저장</Btn>
               <Btn onClick={btnDelete}>삭제</Btn>
@@ -367,7 +355,13 @@ const Tables = (props) => {
                   }
                   return (
                     <tr >
-                      <td><input type="checkbox" value={item.id} name={grade} id={item.id} /></td>
+                      <td><input type="checkbox" 
+                        onClick={(e) => onClickCheckBox(e.target.checked, item.id)} 
+                        checked={checkedItems.includes(item.id) ? true : false}   // checkedItem 배열에 있을경우 활성화, 아닐 시 해제
+                        name={grade} 
+                        className='check-box'/>
+                      </td>
+
                       <td>{item.complete}</td>
                       <td>{item.essential}</td>
                       <td className="tdSubject">{item.subject}</td>
@@ -385,7 +379,7 @@ const Tables = (props) => {
                 }
                 <ResultTr>
                   <td colSpan='4'>합계</td>
-                  <td>{totalCredit()}</td>  {/* 여기는 왜 괄호 써야하는지 모르것네 */}
+                  <td>{totalCredit()}</td>
                   <td>
                     {totalScore(0)}
                   </td>
@@ -410,14 +404,12 @@ export default Tables;
 
 
 // styled component
-
-
+// css
 const MainWrap = styled.div`
   margin: 0 auto;
   width: 80%;
   height: 100%;
   margin-bottom: 30px;
-  /* background-color: indigo; */
   .title-box{
     display: flex;
     justify-content: space-between;

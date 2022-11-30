@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-// import styled from "styled-components";
 import $ from 'jquery';
 
 
@@ -16,13 +15,12 @@ const InputTr = (props) => {
     inputFinValue: ''
   })
 
-
   const { inputCompleteValue, inputEssentialValue,
     inputSubjectValue, inputCreditValue,
     inputAttendValue, inputReportValue,
     inputMidValue, inputFinValue } = inputData;
 
-  const [display, setDisplay] = useState(true); // 학점에 따른 패논패 보이는 state 관리
+  const [display, setDisplay] = useState(true); // 학점에 따른 패논패 state 관리
   
   const CreditChange = (e) => {
     const creditValue = e.target.value;
@@ -36,7 +34,6 @@ const InputTr = (props) => {
 
 
   const dataChange = (e) => {
-    // const {name, value} = e.target
     setInputData({
       ...inputData,
       [e.target.name]:e.target.value
@@ -44,8 +41,9 @@ const InputTr = (props) => {
   }
 
 
-  // 과제 점수 입력 제한
-  // 출석 입력 제한
+  /**
+   * 과제 점수, 출석 점수 입력 제한
+   */
   $(document).on('keyup', '.write_number_20',function() {
     var val= $(this).val();
 
@@ -59,7 +57,9 @@ const InputTr = (props) => {
     }
   })
 
-  // 시험점수 입력 제한
+  /**
+   * 시험점수 입력 제한 함수
+   */
   $(document).on('keyup', '.write_number_30',function() {
     var val= $(this).val();
   
@@ -73,10 +73,18 @@ const InputTr = (props) => {
     }
   })
 
+  const [checkedInput, setCheckedInput] = useState(false)
+
+  const onChangeCheckBox = (e) => {
+    setCheckedInput(!checkedInput)
+    props.setInputCheckBox(!checkedInput)
+  }
+
 
   return(
     <tr className="input-box">
-      <td><input type="checkbox" name={grade}/></td>
+      <td><input type="checkbox" name={grade} id="inputCheckBox"
+        onChange={onChangeCheckBox} checked={checkedInput}/></td>
       <td>
         <select name='inputCompleteValue' id='inputComplete' value={inputCompleteValue} onChange={dataChange}>
           <option value='전공' key='전공'>전공</option>
